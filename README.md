@@ -11,7 +11,8 @@ Minikube (for local development/testing)
 Follow the steps below to complete the assignment:
 
 1. Clone this repository to your local machine:
-   git clone https://github.com/RahulSharma91/KubernetesAssignment.git)https://github.com/RahulSharma91/KubernetesAssignment.git
+   
+   git clone https://github.com/RahulSharma91/NAGPKubernetesAssignment.git
 
 2. Build the Docker image for the Spring Boot application:
    cd microservice-api-deployment
@@ -36,13 +37,13 @@ Follow the steps below to complete the assignment:
    kubectl apply -f postgres-create-db-job.yaml
 
    
-6. Verify the database deployment:
+5. Verify the database deployment:
    
    kubectl get pods
    
    Ensure that the PostgreSQL pod is running successfully.
    
-7. Deploy the Spring Boot application:
+6. Deploy the Spring Boot application:
    
    cd microservice-api-deployment
    
@@ -54,13 +55,13 @@ Follow the steps below to complete the assignment:
    
    kubectl apply -f nagp-member-api-service.yaml
    
-8. Verify the application deployment:
+7. Verify the application deployment:
 
    kubectl get pods
    
    Ensure that the Spring Boot application pod is running successfully.
    
-9. Access the application:
+8. Access the application:
    
    minikube service spring-boot-app-service-name --url
    
