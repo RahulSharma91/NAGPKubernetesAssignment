@@ -67,6 +67,12 @@ Follow the steps below to complete the assignment:
    
   This will give the url by which api can be accessed.
 
+ # Docker Image Used
+
+rahul2791/nagp_member_rest_api:latest
+
+postgres:latest
+
 # Clean up
 
 To clean up and remove all the resources created during the assignment, run the following commands:
