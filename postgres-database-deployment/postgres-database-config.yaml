@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  database.url: jdbc:postgresql://postgres-service:5432/nagp_member_db
+  database.username: rahul
+  database.name: nagp_member_db
+  database.host: postgres-service

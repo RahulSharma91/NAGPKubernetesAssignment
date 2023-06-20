@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nagp-member-api-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nagp-member-api
+  template:
+    metadata:
+      labels:
+        app: nagp-member-api
+    spec:
+      containers:
+      - env:
+        - name: POSTGRESDBURL
+          valueFrom:
+            configMapKeyRef:
+              key: database.url
+              name: nagp-member-api-config
+        - name: POSTGRESDBUSER
+          valueFrom:
+            secretKeyRef:
+              key: database.user
+              name: nagp-member-api-secrets
+        - name: POSTGRESDBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database.password
+              name: nagp-member-api-secrets
+        image: rahul2791/nagp_member_rest_api:latest
+        name: nagp-member-api
+        ports:
+        - containerPort: 8080

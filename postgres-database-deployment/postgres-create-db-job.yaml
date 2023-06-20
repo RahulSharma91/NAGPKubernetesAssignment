@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-db-job
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+      - command:
+        - psql
+        - -h
+        - $(POSTGRES_HOST)
+        - -U
+        - $(POSTGRES_USER)
+        - -d
+        - $(POSTGRES_DB)
+        - -f
+        - /docker-entrypoint-initdb.d/create.sql
+        env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database.password
+              name: db-secrets
+        envFrom:
+        - secretRef:
+              name: db-secrets
+        image: rahul2791/db_schema
+        name: create-db-container
+      restartPolicy: Never
+

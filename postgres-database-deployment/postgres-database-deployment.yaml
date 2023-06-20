@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv
+spec:
+  storageClassName: standard
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /nagp/member-database
+---
+# Define a 'Persistent Voulume Claim'(PVC) for Postgres Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+spec:
+  storageClassName: standard
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Configure 'Deployment' of postgres sql database
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-db-deployment
+  labels:
+    app: postgres
+    tier: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: postgres
+        tier: database
+    spec:
+      containers:
+      - name: postgres-nagp-member-database
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              key: database.name
+              name: db-config
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: database.host
+              name: db-config
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              key: database.username
+              name: db-config
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: db-secrets
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-pv
+      volumes:
+      - name: postgres-pv
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
+
